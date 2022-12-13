@@ -1,32 +1,29 @@
 import os
 import shutil
 
-# Set the path to the Downloads folder
-downloads_path = "C:\\Users\\[username]\\Downloads"
+# Specify the directory where the files are located
+downloads_dir = "C:\\Users\\<username>\\Downloads"
 
-# Set the path to the folder where you want to move the files
-destination_path = "C:\\Users\\[username]\\SortedFiles"
-
-# Set the file extensions and corresponding destination folders
-file_extensions = {
-    ".exe": "Installers",
-    ".jpg": "Pictures",
-    ".mp3": "Music"
+# Create a list of file types to classify
+file_types = {
+    "installers": [".exe", ".msi"],
+    "pictures": [".jpg", ".jpeg", ".png", ".gif"],
+    "documents": [".pdf", ".doc", ".docx", ".txt"]
 }
 
-# Loop through all files in the Downloads folder
-for filename in os.listdir(downloads_path):
-    # Get the file extension
+# Loop through all the files in the downloads directory
+for filename in os.listdir(downloads_dir):
+    # Get the file extension of the current file
     file_ext = os.path.splitext(filename)[1]
-
-    # Check if the file extension is in the file_extensions dictionary
-    if file_ext in file_extensions:
-        # Get the destination folder for this file extension
-        dest_folder = file_extensions[file_ext]
-
-        # Create the destination folder if it doesn't exist
-        if not os.path.exists(os.path.join(destination_path, dest_folder)):
-            os.makedirs(os.path.join(destination_path, dest_folder))
-
-        # Move the file to the destination folder
-        shutil.move(os.path.join(downloads_path, filename), os.path.join(destination_path, dest_folder, filename))
+    
+    # Loop through the file types to find a match
+    for file_type, extensions in file_types.items():
+        # If the file extension matches one of the extensions for this file type
+        if file_ext in extensions:
+            # Create the directory for this file type if it doesn't already exist
+            if not os.path.exists(os.path.join(downloads_dir, file_type)):
+                os.makedirs(os.path.join(downloads_dir, file_type))
+            
+            # Move the file to the correct directory
+            shutil.move(os.path.join(downloads_dir, filename), os.path.join(downloads_dir, file_type, filename))
+            break
